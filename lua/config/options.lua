@@ -2,15 +2,26 @@
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
 
+-- set shiftwidth, tabstop, and softtabstop to 4 for all filetypes
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.softtabstop = 4
 vim.g.editorconfig = true
 
+-- set wrap and breakindent for all filetypes
 vim.opt.wrap = true
 vim.opt.breakindent = true
 
+-- set shell to pwsh for Windows
+vim.opt.shell = "pwsh"
+vim.opt.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command"
+vim.opt.shellquote = ""
+vim.opt.shellxquote = ""
+vim.opt.shellpipe = "| %s"
+vim.opt.shellxescape = '&|<>()@^"% ,;=`'
+
+-- set shiftwidth, tabstop, and softtabstop to 2 for specific filetypes
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = {
 		"lua",
