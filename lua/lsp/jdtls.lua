@@ -30,6 +30,6 @@ return {
 			},
 		})
 
-		vim.notify("Using JDK: " .. version, vim.log.levels.INFO)
+		vim.notify("jdtls is running with JDK " .. version, vim.log.levels.INFO)
 	end,
 }

@@ -20,8 +20,10 @@ M.default_java_version = "21"
 function M.get_java_version()
 	local file = vim.fn.findfile(".java-version", ".;")
 	if file ~= "" then
+		---@type string[]
 		local lines = vim.fn.readfile(file)
-		local version = lines[1] and lines[1]:match("%d+")
+		local line = lines[1] or ""
+		local version = line:match("%d+")
 		if version then
 			return version
 		end
