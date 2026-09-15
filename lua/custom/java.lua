@@ -1,68 +1,40 @@
 local M = {}
 
-local jdk_home = vim.fs.joinpath(vim.env.USERPROFILE or "", ".jdks")
+function M.home_jdk(ver_name)
+	return vim.fs.joinpath(vim.env.USERPROFILE, ".jdks", ver_name)
+end
 
-M.jdk_map = {
-	["17"] = vim.fs.joinpath(jdk_home, "temurin-17.0.16"),
-	["18"] = vim.fs.joinpath(jdk_home, "temurin-18.0.2.1"),
-	["19"] = vim.fs.joinpath(jdk_home, "temurin-19.0.2"),
-	["20"] = vim.fs.joinpath(jdk_home, "temurin-20.0.2"),
-	["21"] = vim.fs.joinpath(jdk_home, "temurin-21.0.12.1"),
-	["22"] = vim.fs.joinpath(jdk_home, "temurin-22.0.2"),
-	["23"] = vim.fs.joinpath(jdk_home, "temurin-23.0.2"),
-	["24"] = vim.fs.joinpath(jdk_home, "temurin-24.0.2"),
-	["25"] = vim.fs.joinpath(jdk_home, "temurin-25.0.4.1"),
-	["26"] = vim.fs.joinpath(jdk_home, "temurin-26.0.2.1"),
+M.java_version_map = {
+	["11"] = M.home_jdk("ms-11.0.32.1"),
+	["17"] = M.home_jdk("temurin-17.0.16"),
+	["18"] = M.home_jdk("temurin-18.0.2.1"),
+	["19"] = M.home_jdk("temurin-19.0.2"),
+	["20"] = M.home_jdk("temurin-20.0.2"),
+	["21"] = M.home_jdk("temurin-21.0.12.1"),
+	["22"] = M.home_jdk("temurin-22.0.2"),
+	["23"] = M.home_jdk("temurin-23.0.2"),
+	["24"] = M.home_jdk("temurin-24.0.2"),
+	["25"] = M.home_jdk("temurin-25.0.4.1"),
+	["26"] = M.home_jdk("temurin-26.0.2.1"),
 }
 
-M.default_java_version = "21"
+M.jdk_name_map = {
+	["temurin-17"] = M.home_jdk("temurin-17.0.16"),
+	["temurin-18"] = M.home_jdk("temurin-18.0.2.1"),
+	["temurin-19"] = M.home_jdk("temurin-19.0.2"),
+	["temurin-20"] = M.home_jdk("temurin-20.0.2"),
+	["temurin-21"] = M.home_jdk("temurin-21.0.12.1"),
+	["temurin-22"] = M.home_jdk("temurin-22.0.2"),
+	["temurin-23"] = M.home_jdk("temurin-23.0.2"),
+	["temurin-24"] = M.home_jdk("temurin-24.0.2"),
+	["temurin-25"] = M.home_jdk("temurin-25.0.4.1"),
+	["temurin-26"] = M.home_jdk("temurin-26.0.2.1"),
+	["ms-11"] = M.home_jdk("ms-11.0.32.1"),
+	["ms-21"] = M.home_jdk("ms-21.0.12.1"),
+	["openjdk-21"] = "C:/java/openjdk-21/",
+}
 
-function M.get_java_version()
-	local file = vim.fn.findfile(".java-version", ".;")
-	if file ~= "" then
-		---@type string[]
-		local lines = vim.fn.readfile(file)
-		local line = lines[1] or ""
-		local version = line:match("%d+")
-		if version then
-			return version
-		end
-	end
-
-	vim.notify(
-		"File .java-version not exist or unreadable, using default Java version: " .. M.default_java_version,
-		vim.log.levels.INFO
-	)
-	return M.default_java_version
-end
-
-function M.get_jdk_path(java_version)
-	local version = java_version or M.get_java_version()
-
-	local jdk_path = M.jdk_map[version]
-	if jdk_path then
-		return jdk_path
-	end
-
-	vim.notify("No JDK path found for Java version: " .. version, vim.log.levels.ERROR)
-	return nil
-end
-
-function M.get_runtime_name(java_version)
-	local version = java_version or M.get_java_version()
-	return "JavaSE-" .. version
-end
-
-function M.get_runtime_path(java_version)
-	local version = java_version or M.get_java_version()
-
-	local jdk_path = M.get_jdk_path(version)
-	if not jdk_path then
-		return nil
-	end
-
-	local bin = vim.fn.has("win32") == 1 and "java.exe" or "java"
-	return jdk_path .. "/bin/" .. bin
-end
+M.default_version = "21"
+M.default_jdk = "temurin-21"
 
 return M
