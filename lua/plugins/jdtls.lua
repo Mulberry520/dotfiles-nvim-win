@@ -3,13 +3,14 @@ local java = require("custom.java")
 return {
 	"mfussenegger/nvim-jdtls",
 	ft = "java",
+
 	config = function()
 		local runtimes = {}
-		for name, path in pairs(java.jdk_name_map) do
+		for name, path in pairs(java.jdk_map) do
 			table.insert(runtimes, {
 				name = name,
 				path = path,
-				default = (name == java.default_jdk),
+				default = (name == java.default_jdk_name),
 			})
 		end
 
