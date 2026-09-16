@@ -4,6 +4,11 @@ local function home_jdk(ver_name)
 	return vim.fs.joinpath(vim.env.USERPROFILE, ".jdks", ver_name)
 end
 
+M.default_java_ver = "21"
+M.default_jdk_name = "temurin-21"
+M.default_ver_file = ".java-version"
+M.jdtls_lombok_jar = vim.fs.joinpath(vim.fn.stdpath("data"), "mason/packages/jdtls/lombok.jar")
+
 M.jdk_map = {
 	["temurin-17"] = home_jdk("temurin-17.0.16"),
 	["temurin-18"] = home_jdk("temurin-18.0.2.1"),
@@ -20,12 +25,29 @@ M.jdk_map = {
 	["openjdk-21"] = "C:/java/openjdk-21/",
 }
 
-M.default_version = "21"
-M.default_jdk_name = "temurin-21"
-M.default_ver_file = ".java-version"
+M.root_marks = {
+	".git",
+	".mvn",
+	"mvnw",
+	"build.gradle",
+	"settings.gradle",
+	M.default_ver_file,
+	"pom.xml",
+}
 
-local version_cache = {}
-local group = vim.api.nvim_create_augroup("JdtAutoVer", { clear = true })
+function M.get_jdk_runtimes()
+	local runtimes = {}
+	for name, path in pairs(M.jdk_map) do
+		table.insert(runtimes, {
+			name = name,
+			path = path,
+			default = (name == M.default_jdk_name),
+		})
+	end
+	return runtimes
+end
+
+local ver_cache = {}
 
 local function find_jdk_name(ver_num)
 	for name, _ in pairs(M.jdk_map) do
@@ -33,39 +55,35 @@ local function find_jdk_name(ver_num)
 			return name
 		end
 	end
-
 	return nil
 end
 
-local function find_proj_root(curr_path)
-	return vim.fs.root(curr_path, {
-		".mvn",
-		".git",
-		"build.gradle",
-		M.default_ver_file,
-		"pom.xml",
-	})
+local function jdt_set_runtime(jdk_name)
+	local ok, jdtls = pcall(require, "jdtls")
+	if ok and jdtls.set_runtime then
+		vim.notify("Set runtime jdk: " .. jdk_name, vim.log.levels.INFO)
+		jdtls.set_runtime(jdk_name)
+	end
 end
 
-local function set_runtime_jdk(bufnr)
-	local buf_path = vim.fn.bufname(bufnr)
-	if buf_path == "" then
+local function auto_set_jdk(bufnr)
+	local buf_name = vim.fn.bufname(bufnr)
+	if buf_name == "" then
 		return
 	end
-	buf_path = vim.fn.fnamemodify(buf_path, ":p:h")
+	local buf_path = vim.fn.fnamemodify(buf_name, ":p:h")
 
-	for root, jdk_name in pairs(version_cache) do
+	for root, jdk_name in pairs(ver_cache) do
 		if buf_path:sub(1, #root) == root then
-			local ok, jdtls = pcall(require, "jdtls")
-			if ok and jdtls.set_runtime then
-				vim.notify("set runtime jdk: " .. jdk_name)
-				jdtls.set_runtime(jdk_name)
+			local ch = buf_path:sub(#root + 1, #root + 1)
+			if ch == "" or ch == "/" then
+				jdt_set_runtime(jdk_name)
+				return
 			end
-			return
 		end
 	end
 
-	local proj_root = find_proj_root(buf_path)
+	local proj_root = vim.fs.root(buf_path, M.root_marks)
 	if not proj_root then
 		return
 	end
@@ -84,13 +102,11 @@ local function set_runtime_jdk(bufnr)
 		return
 	end
 
-	version_cache[proj_root] = jdk_name
-	local ok1, jdtls = pcall(require, "jdtls")
-	if ok1 and jdtls.set_runtime then
-		vim.notify("Set runtime jdk: " .. jdk_name)
-		jdtls.set_runtime(jdk_name)
-	end
+	ver_cache[proj_root] = jdk_name
+	jdt_set_runtime(jdk_name)
 end
+
+local group = vim.api.nvim_create_augroup("JdtAutoVer", { clear = true })
 
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = group,
@@ -99,12 +115,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		if not client or client.name ~= "jdtls" then
 			return
 		end
-		set_runtime_jdk(args.buf)
+		auto_set_jdk(args.buf)
 	end,
 })
 
 vim.api.nvim_create_user_command("JdtClearVer", function()
-	version_cache = {}
+	ver_cache = {}
+	vim.notify("Jdk version cache cleared", vim.log.levels.INFO)
 end, {})
 
 return M

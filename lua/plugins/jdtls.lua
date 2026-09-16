@@ -1,37 +1,25 @@
 local java = require("custom.java")
-local lombok_jar = vim.fs.joinpath(vim.fn.stdpath("data"), "mason/packages/jdtls/lombok.jar")
 
 return {
 	"mfussenegger/nvim-jdtls",
 	ft = "java",
-
 	config = function()
-		local runtimes = {}
-		for name, path in pairs(java.jdk_map) do
-			table.insert(runtimes, {
-				name = name,
-				path = path,
-				default = (name == java.default_jdk_name),
-			})
-		end
-
-		local config = {
+		require("jdtls").start_or_attach({
 			cmd = {
 				"jdtls",
-				"--jvm-arg=-javaagent:" .. lombok_jar,
+				"--jvm-arg=-javaagent:" .. java.jdtls_lombok_jar,
 			},
-			root_markers = { "pom.xml" },
+			root_markers = java.root_marks,
 			settings = {
 				java = {
 					configuration = {
-						runtimes = runtimes,
+						runtimes = java.get_jdk_runtimes(),
 						maven = { enabled = true },
 					},
 					lombok = { enabled = true },
 					autobuild = { enabled = true },
 				},
 			},
-		}
-		require("jdtls").start_or_attach(config)
+		})
 	end,
 }
