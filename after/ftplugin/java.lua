@@ -1,0 +1,3 @@
+vim.opt_local.spell = true
+vim.opt_local.spelllang = { "en", "cjk" }
+vim.opt_local.spelloptions:append("camel")
