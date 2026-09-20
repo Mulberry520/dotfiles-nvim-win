@@ -7,6 +7,8 @@ return {
 		require("jdtls").start_or_attach({
 			cmd = {
 				"jdtls",
+				"-vm",
+				java.jdk_map[java.default_java_ver],
 				"--jvm-arg=-javaagent:" .. java.jdtls_lombok_jar,
 			},
 			root_markers = java.root_marks,
