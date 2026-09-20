@@ -28,7 +28,7 @@ vim.g.maplocalleader = ","
 
 -- set spell file
 --local spell_dir = vim.fs.joinpath(vim.fn.stdpath("config"), "spell")
-local spell_dir = vim.fs.joinpath(vim.env.USERPROFILE_LINK, "AppData/Local/nvim/spell")
+local spell_dir = vim.fs.joinpath(vim.env.USERPROFILE, "AppData/Local/nvim/spell")
 if vim.fn.isdirectory(spell_dir) == 0 then
 	vim.fn.mkdir(spell_dir, "p")
 end
