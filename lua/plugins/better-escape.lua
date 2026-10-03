@@ -4,8 +4,7 @@ return {
 	opts = {
 		timeout = vim.o.timeoutlen,
 		mappings = {
-			i = { j = { k = "<Esc>" } },
-			v = { j = { k = "<Esc>" } },
+			i = { j = { j = false } },
 			t = { j = { k = "<C-\\><C-n>" } },
 		},
 	},

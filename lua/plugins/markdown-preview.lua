@@ -22,6 +22,25 @@ return {
 	end,
 
 	config = function()
-		vim.g.mkdp_highlight_current_line = 1
+		vim.g.mkdp_page_title = "${name}.md"
+		vim.g.mkdp_combine_preview = 1
+		vim.g.mkdp_combine_preview_auto_refresh = 1
+		vim.g.mkdp_preview_options = {
+			mkit = {
+				html = true,
+				breaks = true,
+				linkinfy = true,
+			},
+			katex = {
+				strict = "warn",
+				trust = true,
+				throwOnError = false,
+			},
+			maid = {
+				theme = "neutral",
+				useMaxWidth = false,
+			},
+			content_editable = false,
+		}
 	end,
 }
