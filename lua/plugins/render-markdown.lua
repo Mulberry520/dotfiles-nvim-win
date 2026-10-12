@@ -4,7 +4,7 @@ return {
 		"nvim-treesitter/nvim-treesitter",
 		"nvim-tree/nvim-web-devicons",
 	},
-	ft = { "markdown" },
+	ft = { "markdown", "Avante" },
 	opts = {
 		enabled = true,
 		heading = {
