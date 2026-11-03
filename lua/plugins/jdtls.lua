@@ -1,6 +1,7 @@
 local java = require("custom.java")
 
 return {
+	-- Affected by LazyVim extra "lang.java"
 	"mfussenegger/nvim-jdtls",
 	event = "VeryLazy",
 	config = function()
