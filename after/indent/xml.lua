@@ -5,7 +5,6 @@ local indent4_markers = {
 	"build.gradle",
 	"build.gradle.kts",
 	"settings.gradle",
-	"settings.gradle",
 	".classpath",
 	".project",
 }
