@@ -1,51 +1,32 @@
 return {
+	-- Affected by LazyVim extras: "coding.blink", "ai.copilot", "copilot", "lang.sql"
 	"saghen/blink.cmp",
-	dependencies = {
-		"zbirenbaum/copilot.lua",
-		"fang2hou/blink-copilot",
-	},
 	opts = {
 		keymap = {
-			preset = "default",
 			["<C-y>"] = false,
-			["<CR>"] = { "select_and_accept", "fallback" },
 			["<Tab>"] = {
 				function(cmp)
 					if cmp.snippet_active() then
 						return cmp.accept()
-					else
-						return cmp.select_next()
 					end
+					return cmp.select_next()
 				end,
 				"snippet_forward",
 				"fallback",
 			},
-			["<S-Tab>"] = {
-				function(cmp)
-					if cmp.snippet_active() then
-						return cmp.snippet_backward()
-					end
-				end,
-				"fallback",
-			},
 		},
 		sources = {
-			default = { "lsp", "copilot", "snippets", "path", "buffer" },
 			per_filetype = {
 				markdown = { "snippets", "buffer" },
 				txt = { "path", "buffer" },
 			},
 			providers = {
-				copilot = {
-					name = "copilot",
-					module = "blink-copilot",
-					score_offset = -2,
-					async = true,
-				},
+				-- LSP items first; Copilot takes over when LSP returns nothing.
+				lsp = { score_offset = 200 },
+				copilot = { score_offset = 100 },
 			},
 		},
 		cmdline = {
-			enabled = true,
 			sources = { "cmdline", "path" },
 		},
 	},
