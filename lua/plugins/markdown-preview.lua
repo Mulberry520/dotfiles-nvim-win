@@ -1,7 +1,15 @@
 return {
+	-- Affected by LazyVim extra "lang.markdown"
 	"iamcco/markdown-preview.nvim",
-	cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-	ft = { "markdown" },
+	init = function()
+		vim.g.mkdp_page_title = "${name}.md"
+		vim.g.mkdp_combine_preview = 1
+		vim.g.mkdp_preview_options = {
+			mkit = { breaks = true },
+			katex = { strict = "warn", trust = true },
+			maid = { theme = "neutral", useMaxWidth = false },
+		}
+	end,
 
 	build = function(plugin)
 		local yarn_path = vim.fn.exepath("yarn.cmd")
@@ -19,28 +27,5 @@ return {
 				vim.notify("[markdown-preview] yarn install failed: " .. output, vim.log.levels.ERROR)
 			end)
 		end
-	end,
-
-	config = function()
-		vim.g.mkdp_page_title = "${name}.md"
-		vim.g.mkdp_combine_preview = 1
-		vim.g.mkdp_combine_preview_auto_refresh = 1
-		vim.g.mkdp_preview_options = {
-			mkit = {
-				html = true,
-				breaks = true,
-				linkinfy = true,
-			},
-			katex = {
-				strict = "warn",
-				trust = true,
-				throwOnError = false,
-			},
-			maid = {
-				theme = "neutral",
-				useMaxWidth = false,
-			},
-			content_editable = false,
-		}
 	end,
 }
