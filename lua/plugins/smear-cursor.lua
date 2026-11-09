@@ -1,0 +1,27 @@
+return {
+  "sphamba/smear-cursor.nvim",
+  opts = {
+    smear_insert_mode = false,
+    smear_to_cmd = false,
+
+    time_interval = 10,
+    cursor_color = "none",
+    legacy_computing_symbols_support = true,
+    never_draw_over_target = true,
+    hide_target_hack = true,
+    particles_enabled = true,
+    particles_per_second = 300.0,
+    particles_per_length = 1.5,
+    particle_spread = 0.6,
+    particle_damping = 0.15,
+    particle_gravity = -10,
+    particle_max_num = 150,
+    particle_max_lifetime = 500.0,
+    particle_max_initial_velocity = 20,
+    particle_velocity_from_cursor = 0.25,
+    particle_switch_octant_braille = 0.35,
+    particle_random_velocity = 80.0,
+    particle_lifetime_distribution_exponent = 3.0,
+    min_distance_emit_particles = 1.0,
+  },
+}
