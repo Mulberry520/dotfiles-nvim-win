@@ -4,7 +4,7 @@
 
 -- Map ctrl+j to enter a new line in terminal mode
 vim.api.nvim_create_autocmd("TermEnter", {
-	callback = function(args)
-		vim.keymap.set("t", "<C-j>", "<NL>", { buffer = args.buf })
-	end,
+  callback = function(args)
+    vim.keymap.set("t", "<C-j>", "<NL>", { buffer = args.buf })
+  end,
 })
