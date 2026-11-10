@@ -1,5 +1,4 @@
 return {
-	-- Affected by LazyVim extra "ai.copilot"
 	"nvim-lualine/lualine.nvim",
 	opts = function(_, opts)
 		opts.sections.lualine_a[1] = {
