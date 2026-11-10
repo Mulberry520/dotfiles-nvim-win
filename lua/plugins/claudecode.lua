@@ -1,6 +1,5 @@
 return {
   -- Affected by LazyVim extra "ai.claudecode"
-  -- Affected by LazyVim extra "ai.claudecode"
   "coder/claudecode.nvim",
   opts = {
     terminal = {

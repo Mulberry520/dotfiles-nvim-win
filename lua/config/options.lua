@@ -9,7 +9,7 @@ vim.opt.spell = true
 vim.opt.spelllang = { "en", "cjk" }
 
 -- Set terminal to pwsh
-LazyVim.terminal.setup("pwsh.exe")
+LazyVim.terminal.setup("pwsh")
 
 -- Remap local leader
 vim.g.maplocalleader = ","
