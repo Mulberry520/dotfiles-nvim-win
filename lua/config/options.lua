@@ -5,8 +5,6 @@
 -- Set text display options
 vim.opt.wrap = true
 vim.opt.breakindent = true
-vim.opt.spell = true
-vim.opt.spelllang = { "en", "cjk" }
 
 -- Set terminal to pwsh
 LazyVim.terminal.setup("pwsh")
