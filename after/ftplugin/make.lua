@@ -1,7 +1,7 @@
 -- Makefile recipes require hard tabs; display and shift them as 4 columns.
 local ec = vim.b.editorconfig
 if ec and (ec.indent_size or ec.indent_style or ec.tab_width) then
-	return
+  return
 end
 
 vim.opt_local.expandtab = false
